@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <title>로그인 페이지</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+<header>
+</header>
+    <div class="Signin">
+        <div class="form">
+            <form class="Signin-form" action="{{ url_for('login') }}" method="post">
+                <label>ID</label><br>
+                <input type="text" name="userID" placeholder="userid"/><br>
+
+                <label>PW</label><br>
+                <input type="password" name="password" placeholder="password"/> &nbsp; <button type="submit">로그인</button >
+                <br><br>
+
+            </form>
+            <button class="button" onclick="window.location.href='{{ url_for('law') }}'">회원가입</button>
+            <button class="button"onclick="window.location.href='{{ url_for('find_ID') }}'">ID 찾기</button>
+            <button class="button" onclick="window.location.href='{{ url_for('findPW') }}'">PW 찾기</button><br>
+        </div>
+    </div>
+</body>
+</html>

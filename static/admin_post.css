@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+label {
+    margin-top: 10px;
+    display: block;
+}
+input[type="text"],
+textarea,
+input[type="file"],
+input[type="submit"] {
+    width: calc(100% - 20px);
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+}
+#nickname {
+    width: 90%;
+}
+#title {
+    width: 90%;
+}
+#content {
+    width: 90%;
+    height: 100px;
+}
+#image {
+    width: 90%;
+}
+input[type="submit"] {
+    margin-top: 20px;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+}
+input[type="submit"]:hover {
+    background-color: #555;
+}

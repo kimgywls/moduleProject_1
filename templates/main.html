@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Main Page</title>
+</head>
+<body>
+    <header>
+        <h1>주식서비스에 오신걸 환영합니다.</h1>
+    </header>
+    
+    <section>
+        <article>
+            <button class="imgBnt" type="button" onclick="window.location.href='{{ url_for('stock') }}'">
+                <img class="img" src="{{ url_for('static', filename='img_front/stock.png') }}">
+            </button>
+            <label class="label_title">주가확인</label><br>
+            <pre class="content">시간별 주식 시세 정보 <br>주가를 확인해요!</pre>
+        </article>
+
+        <article>
+            <button class="imgBnt" type="button" onclick="window.location.href='{{ url_for('notices') }}'">
+                <img class="img" src="{{ url_for('static', filename='img_front/announcement.png') }}">
+            </button>
+            <label class="label_title">공지사항</label><br>                
+            <pre class="content">공지사항입니다!</pre>
+        </article>
+
+        <article>
+            <button class="imgBnt" type="button" onclick="window.location.href='{{ url_for('community') }}'">
+                <img class="img" src="{{ url_for('static', filename='img_front/discussion.png') }}">
+            </button>
+            <label class="label_title">종목토론</label><br>
+            <pre class="content">건전한 토론문화를 정착해 갑시다!</pre>
+        </article>
+
+        <div id="sign">
+            {% if 'user_id' in session %}
+                <li> User : {{ session['user_id'] }}</li>
+                <button onclick="window.location.href='{{ url_for('logout') }}'">logout</button>
+                {% if session['user_id'] == 'admin' %}
+                    <button onclick="window.location.href='{{ url_for('Adminauth') }}'">AdminPage</button>
+                {% endif %}
+            {% else %}
+                <button onclick="window.location.href='{{ url_for('login') }}'">로그인</button>
+                <button onclick="window.location.href='{{ url_for('law') }}'">회원가입</button>
+                <button onclick="window.location.href='{{ url_for('find_ID') }}'">ID찾기</button>
+                <button onclick="window.location.href='{{ url_for('findPW') }}'">PW찾기</button>
+            {% endif %}
+
+        </div>
+
+    <footer>
+        <p>기타 문의사항은 운영팀에게 연락바랍니다.</p>
+    </footer>
+
+</body>
+</html>

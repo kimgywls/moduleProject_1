@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='new_post.css') }}">
+    <title>새 게시글 작성</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>새 게시글 작성</h1>
+    <form action="{{ url_for('new_post') }}" method="post" enctype="multipart/form-data">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" required><br>
+        <label for="content">내용:</label>
+        <textarea id="content" name="content" required></textarea><br>
+        <label for="author">작성자:</label>
+        <input type="text" id="author" name="author" value="{{ session['nickname'] }}" readonly><br>
+        <label for="image">이미지 첨부:</label>
+        <input type="file" id="image" name="image"><br>
+        <input type="submit" value="게시글 작성">
+    </form>
+    <a href="{{ url_for('community') }}">목록으로 돌아가기</a>
+</body>
+</html>

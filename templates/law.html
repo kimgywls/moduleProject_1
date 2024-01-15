@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>개인정보 수집 및 이용 동의</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='law.css') }}">
+</head>
+<body>
+  <h1>개인정보 수집 및 이용 동의</h1>
+
+  <div class="container1">
+    <div class="section">
+      <h2>가. 개인정보의 수집·이용에 관한 사항</h2>
+      <p><strong>개인정보의 수집·이용 목적</strong></p>
+      <p>귀하의 개인정보는 주식종목토론방 가입을 위한 목적으로 수집·이용됩니다.</p>
+
+      <p><strong>수집·이용할 개인정보의 항목</strong></p>
+      <p>수집·이용되는 귀하의 개인정보는 다음과 같습니다.</p>
+      <p><em>&lt;필수정보&gt;</em></p>
+      <ul>
+        <li>인적사항(이름, 이메일)</li>
+      </ul>
+
+      <p><strong>개인정보의 보유·이용기간</strong></p>
+      <p>개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 종료합니다.</p>
+      <p>제재된 회원일 경우 플래그 처리 후 재가입 방지를 위해 향후 보존</p>
+      <p>- 회원 탈퇴 시</p>
+
+      <p><strong>동의를 거부할 권리 및 동의를 거부할 경우의 불이익</strong></p>
+      <p>위 개인정보의 수집·이용에 동의를 거부할 수 있습니다. 다만, 거부할 경우 회원가입이 불가능합니다.</p>
+      <p class="refuse-text">위 개인정보의 수집·이용에 동의를 거부할 수 있습니다. 다만, 거부할 경우 회원가입이 불가능합니다.</p>
+    </div>
+  </div>
+
+  <div class="bottom-checkbox-label1">
+    <div class="checkbox-label">
+      <input type="checkbox" id="agree1" name="agree1" >
+      <label for="agree">동의함</label>
+    </div>
+  </div>
+
+  <div class="container2">
+    <div class="section">
+        <h2>나. 제공에 관한 사항</h2>
+        <p>❏ 제공받는 자</p>
+        <p>   ❍ 주식 서비스 </p>
+        <p>❏ 제공받는 자의 목적</p>
+        <p>   ❍ 회원가입</p>
+        <p>❏ 동의를 거부할 권리 및 동의를 거부할 경우의 불이익</p>
+        <p>   ❍ 회원가입이 불가능합니다.</p>
+        <p>본인은 위와 같은 목적으로 본인의 개인정보를 제공·조회하는 것에 동의합니다.</p>
+    </div>
+  </div>
+  <div class="bottom-checkbox-label2">
+    <div class="checkbox-label">
+      <input type="checkbox" id="agree2" name="agree2">
+      <label for="agree">동의함</label>
+    </div>
+  </div>
+
+  <button id="nextButton" onclick="window.location.href='{{ url_for('signup') }}'">다음 화면으로 넘어가기</button>
+
+  <script>
+    const nextButton = document.getElementById('nextButton');
+    const agreeCheckbox1 = document.getElementById('agree1');
+    const agreeCheckbox2 = document.getElementById('agree2');
+
+   
+    function checkAgreement() {
+      if (agreeCheckbox1.checked && agreeCheckbox2.checked) {
+        nextButton.disabled = false;
+      } else {
+        nextButton.disabled = true;
+      }
+    }
+
+    agreeCheckbox1.addEventListener('change', checkAgreement);
+    agreeCheckbox2.addEventListener('change', checkAgreement);
+  </script>
+</body>
+</html>

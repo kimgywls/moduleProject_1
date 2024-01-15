@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='notice.css') }}">
+    <title>{{ notice.title }}</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>{{ notice.title }}</h1>
+    <p>{{ notice.content }}</p>
+    <a href="{{ url_for('notices') }}">목록으로 돌아가기</a>
+</body>
+</html>

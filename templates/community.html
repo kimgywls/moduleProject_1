@@ -1,0 +1,39 @@
+<!-- community.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='community.css') }}">
+    <title>커뮤니티 게시판</title>
+    <!-- 기타 head 내용 -->
+</head>
+<body>
+
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>커뮤니티 게시판</h1>
+    <a href="{{ url_for('new_post') }}">새 글 작성</a>
+    <ul>
+        {% for post in posts %}
+        <li>
+            <h2>{{ post.title }}</h2>
+            <p>작성자: {{ post.author }}</p>
+            <p>내용 : {{ post.content }}</p>
+            <p>작성일: {{ post.created_at }}</p>
+            {% if post.image_path %}
+            <!-- 이미지 파일의 URL을 생성하여 이미지를 표시합니다. -->
+            <img src="{{ url_for('static', filename=post.image_path) }}" alt="게시글 이미지">
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

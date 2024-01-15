@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='ban.css') }}">-->
+    <title>사용자 밴 페이지</title>
+    <!-- jQuery 추가 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>사용자 밴 페이지</h1>
+
+    <label for="nickname">사용자 닉네임 검색: </label>
+    <input type="text" id="nickname" name="nickname" required>
+    <button id="searchButton">검색</button>
+
+    <div id="user-info" style="display:none;">
+        <h2>사용자 정보</h2>
+        <p><strong>사용자 이름:</strong> <span id="display-username"></span></p>
+        <p><strong>이메일:</strong> <span id="display-email"></span></p>
+        <p><strong>닉네임: </strong> <span id='display-nickname'></span></p>
+        <p><strong>계정 상태:</strong> <span id="account-status"></span></p>
+        <button id="banButton">사용자 밴</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#searchButton').click(function() {
+                const nickname = $('#nickname').val();
+                $.ajax({
+                    url: '/search_user_for_ban',  // 이 부분을 새로운 라우트 경로로 변경
+                    type: 'POST',
+                    data: { nickname: nickname },
+                    success: function(response) {
+                        $('#display-username').text(response.username);
+                        $('#display-email').text(response.email);
+                        $('#display-nickname').text(response.nickname);
+                        $('#account-status').text(response.account_status);
+                        $('#user-info').show();
+                    },
+                    error: function() {
+                        alert('사용자 검색 중 오류가 발생했습니다.');
+                    }
+                });
+            });
+
+            $('#banButton').click(function() {
+                const nickname = $('#display-nickname').text();
+                if (confirm('사용자를 제재하는 것이 확실합니까?')) {
+                    $.ajax({
+                        url: '/ban_user',
+                        type: 'POST',
+                        data: { nickname: nickname },
+                        success: function(response) {
+                            if(response.banned) {
+                                $('#account-status').text('밴됨');
+                                alert('사용자가 밴 처리되었습니다.');
+                            }
+                        },
+                        error: function() {
+                            alert('사용자 밴 처리 중 오류가 발생했습니다.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

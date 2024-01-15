@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <!-- jQuery 추가 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>관리자 페이지</h1>
+    <button onclick="window.location.href='{{ url_for('ban_page') }}'">사용자 밴 페이지</button>
+    <button onclick="window.location.href='{{ url_for('notices') }}'">공지사항 페이지</button>
+    <button onclick="window.location.href='{{ url_for('new_noti_post') }}'">공지사항 작성</button>
+    <!-- 사용자 검색 폼 -->
+    <form id="searchForm" action="{{ url_for('search_user') }}" method="post">
+        <label for="search_username">사용자 닉네임 검색: </label>
+        <input type="text" id="search_username" name="search_username" required>
+        <input type="submit" value="검색">
+    </form>
+
+    <!-- 검색 결과 영역 (초기에는 비어있음) -->
+    <div id="searchResults"></div>
+
+    <!-- 사용자 상세 정보 표시 영역 -->
+    <div id="userDetails"></div>
+
+    <script>
+    $(document).ready(function() {
+        // 사용자 검색 폼 제출 이벤트 바인딩
+        $('#searchForm').submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    // 사용자 상세정보를 페이지에 삽입
+                    $('#userDetails').html(response.user_details_html);
+                    // 검색 결과를 페이지에 삽입
+                    $('#searchResults').html(response.search_results_html);
+                },
+                error: function() {
+                    alert('검색을 처리하는 중 문제가 발생했습니다.');
+                }
+            });
+        });
+
+        // 게시물 삭제 폼 제출 이벤트 바인딩
+        $(document).on('submit', 'form.deleteForm', function(event) {
+            event.preventDefault();
+            if (confirm('이 게시물을 삭제하시겠습니까?')) {
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    success: function(response) {
+                        // 성공적으로 삭제되면 해당 게시물을 DOM에서 제거
+                        form.closest('li').remove();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>

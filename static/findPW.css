@@ -1,0 +1,59 @@
+.total{
+    border: 5px solid #ccc;
+    width : 500px;
+    height: 270px;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+}
+.form{
+    width : 400px;
+    height: 200px;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    transform: translate(10%, -15%);
+}
+#findPW-Label {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    transform: translate(-50%, -30%);
+    font-size: 25px;
+}
+#note{
+    position: absolute;
+    width: 500px;
+    top: 10%;
+    left: 10%;
+    transform: translate(-30%, 100%);
+    margin: 10px;
+    font-size: 13px;
+}
+.findPW-form {
+    display: inline-block;
+    text-align: left;
+    position: absolute;
+    left: 10%;
+    top: 20%;
+    transform: translate(-20%, 70%);
+    margin: 5px;
+}
+#email_pw{
+    margin-top: 5px;
+}
+button, #homeBtn{
+    border: none;
+    background-color: #1a1818;
+    color: white;
+    font-size: 13.5px;
+}
+#homeBtn{
+    position: absolute;
+    top: 60%;
+    left: 40%;
+    transform: translate(10%, 55%);
+    font-size: 20px;
+}

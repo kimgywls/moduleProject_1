@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 재설정 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='findPW.css') }}">
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <div class="total">
+        <div class="form">
+            <label id="findPW-Label">비밀번호 재설정</label>
+            <label id="note">비밀번호를 재설정하고 싶다면 이메일 인증을 받아주세요.</label><br>
+
+            <!-- action을 /find_password로 설정합니다. -->
+            <form class="findPW-form" method="post" action="{{ url_for('find_password') }}">
+                <label>ID:</label> &nbsp;&nbsp;&nbsp;
+                <input type="text" id="id_pw" name="id_pw" required placeholder="가입한 ID"><br>
+                <label>Email:</label>
+                <input type="text" id="email_pw" name="email_pw" required placeholder="가입시 입력한 이메일"> &nbsp;<button type="submit">비밀번호 재설정</button>
+            </form>
+        </div>
+        <button id="homeBtn" onclick="window.location.href='{{ url_for('home') }}'">HOME</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% if search_results %}
+<ul>
+    {% for post in search_results %}
+    <li>
+        {{ post.title }} - {{ post.content }}
+        <!-- 삭제 버튼 추가 -->
+        <form class="deleteForm" action="{{ url_for('delete_post', post_id=post.id) }}" method="post" style="display: inline;">
+            <input type="submit" value="삭제">
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>검색 결과가 없습니다.</p>
+{% endif %}

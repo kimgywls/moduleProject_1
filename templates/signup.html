@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <!-- jQuery 라이브러리 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+</head>
+</head>
+<body>
+<script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+</script>
+<script>
+$(document).ready(function () {
+    // 아이디 중복 검사
+    $('#checkUserID').click(function (event) {
+        event.preventDefault();  // 폼 제출 방지
+        var userID = $('#userID').val();
+        $.ajax({
+            url: "/check_userid",  // Flask URL 직접 입력
+            type: "POST",
+            data: { userID: userID },
+            success: function (response) {
+                if(response.exists){
+                    alert("이미 존재하는 아이디입니다.");
+                    $('#userID').val('').focus(); // 입력 필드 초기화 및 포커스
+                } else {
+                    alert("사용 가능한 아이디입니다.");
+                    //$('#userID').prop('disabled', true); // 입력 필드 비활성화
+                    //$('#checkUserID').prop('disabled', true); // 버튼 비활성화
+                }
+            }
+        });
+    });
+
+    // 닉네임 중복 검사
+    $('#checkNickname').click(function (event) {
+        event.preventDefault();
+        var nickname = $('#nickname').val();
+        $.ajax({
+            url: "/check_nickname",
+            type: "POST",
+            data: { nickname: nickname },
+            success: function (response) {
+                if(response.exists){
+                    alert("이미 존재하는 닉네임입니다.");
+                    $('#nickname').val('').focus();
+                } else {
+                    alert("사용 가능한 닉네임입니다.");
+                    //$('#nickname').prop('disabled', true);
+                    //$('#checkNickname').prop('disabled', true);
+                }
+            }
+        });
+    });
+
+    //이메일 인증
+    $('#otpSend').click(function(e){
+        e.preventDefault(); // 폼 제출을 막습니다.
+
+        var email = $('input[name="email"]').val(); // 이메일 주소를 가져옵니다.
+        if(email) { // 이메일 주소가 있을 경우에만 요청을 보냅니다.
+            $.ajax({
+                url: "{{ url_for('send_otp') }}", // Flask 라우트로 이메일 주소를 보냅니다.
+                type: "post",
+                data: {email: email},
+                success: function(response){
+                    // 요청이 성공하면 여기에서 처리합니다.
+                    alert('인증번호가 발송되었습니다. 이메일을 확인해주세요.');
+                },
+                error: function(){
+                    // 요청이 실패하면 여기에서 처리합니다.
+                    alert('인증번호 발송에 실패했습니다. 다시 시도해주세요.');
+                }
+            });
+        } else {
+            alert('이메일 주소를 입력해주세요.');
+        }
+    });
+
+    $('#verifyOtpButton').click(function(e){
+    e.preventDefault();
+    var inputOtp = $('input[name="InputOtp"]').val().trim(); // 공백 제거
+    if(inputOtp) {
+        $.ajax({
+            url: "{{ url_for('verify_otp') }}",
+            method: "POST",
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8", // 명시적으로 contentType 설정
+            data: { InputOtp: inputOtp }, // 서버에서 기대하는 키와 일치하도록 수정
+            success: function(response){
+                alert(response.message); // 성공 또는 실패 메시지
+            },
+            error: function(xhr){
+                // 서버 응답을 이용한 오류 메시지
+                alert('인증번호 확인에 실패했습니다: ' + xhr.responseText);
+            }
+        });
+    } else {
+        alert('인증번호를 입력해주세요.');
+    }
+});
+});
+</script>
+
+<header>
+</header>
+    <div class="Signup">
+        <div class="form">
+            <form class="register-form" action="{{ url_for('signup') }}" method="post">
+                <label>아이디</label><br>
+                <input type="text" id="userID" name="userID" placeholder="userID"/>
+                <input type="button" id="checkUserID" class="button" value="아이디 중복검사" name="checkID"/><br>
+
+                <label>비밀번호</label><br>
+                <input type="password" name="password" placeholder="password"/><text name="password_note1" class="note">특수문자, 숫자를 포함하여 최소 8자리 이상입니다.</text><br>
+                <text name="password_note2" class="note">특수문자는 ~!@#$%^&()? 만 가능합니다.</text><br>
+                <label>비밀번호 확인</label><br>
+                <input type="password" name="checkPassword" placeholder="checkPassword"/><br>
+
+                <label>이름</label><br>
+                <input type="text" name="username" placeholder="name"/> <text name="name_note" class="note">이름은 4자 이하입니다.</text><br>
+                <label>닉네임</label><br>
+                <input type="text" id="nickname" name="nickname" placeholder="nickName"/>
+                <input type="button" id="checkNickname" class="button" value="닉네임 중복검사" name="checkNickname"/><br>
+                <text name="nickname_note" class="note" >닉네임에 욕설, 혐오 표현 포함은 제재 대상입니다.</text><br>
+
+                <label>이메일 주소</label><br>
+                <input type="email" name="email" placeholder="emailAddr"/>
+                <input type="button" id="otpSend" class="button" value="인증번호 발송" name="otpSend"/><br>
+
+                <label>이메일 인증</label><br>
+                <input type="text" name = "InputOtp" placeholder="input OTP"/>
+                <input type="button" id="verifyOtpButton" class="button" value="인증번호 확인" name="checkOtp"/><br>
+
+                <br><br><br>
+                <input type="submit" id="submitBnt" value="회원가입 완료하기">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<!-- 프론트 엔드에서 이렇게 작성하면 벡엔드에서는 라우팅 2개가 필요하다 check_userid, check_nickname,signup, send_otp, check_otp-->

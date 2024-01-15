@@ -1,0 +1,29 @@
+.Signup{
+    width : 600px;
+    height: 580px;
+    border: 5px solid #ccc;
+    position: relative;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, 10%);
+}
+.form{
+    width : 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.note {
+    font-size : 12px;
+    opacity : 0.7; /* 투명도*/
+}
+.button, #submitBnt{
+    border: none;
+    background-color: #1a1818;
+    color: white;
+    font-size: 13.5px;
+}
+#submitBnt{
+    font-size: 17px;
+}

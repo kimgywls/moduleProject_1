@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_post.css') }}">
+    <title>새로운 공지사항 작성</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>공지사항 작성</h1>
+    <form method="post" action="{{ url_for('new_noti_post') }}">
+        <label for="title">제목:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="content">내용:</label><br>
+        <textarea id="content" name="content" required></textarea><br>
+        <input type="submit" value="작성">
+    </form>
+</body>
+</html>

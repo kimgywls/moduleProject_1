@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이메일 인증 페이지</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>관리자 이메일 인증</h1>
+
+    <!-- OTP 발송 폼 -->
+    <form id="sendOtpForm" method="post">
+        <label for="email">이메일 입력: </label>
+        <input type="email" id="email" name="email" value="{{ admin_email }}" required readonly>
+        <button type="button" id="sendOtpButton">인증 이메일 보내기</button>
+    </form>
+
+    <!-- OTP 인증 폼 -->
+    <div id="verifyOtpSection" class="hidden">
+        <form id="verifyOtpForm" method="post">
+            <label for="verification-code">인증번호를 입력해주세요: </label>
+            <input type="text" id="verification-code" name="InputOtp" required>
+            <button type="button" id="verifyOtpButton">인증번호 확인</button>
+        </form>
+        <p id="error-message"></p>
+    </div>
+
+    <!-- 인증 완료 섹션 -->
+    <div id="completion-section" class="hidden">
+        <p>인증이 완료되었습니다.</p>
+        <a href="{{ url_for('admin') }}"><button>관리자 페이지로 가기</button></a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#sendOtpButton').click(function() {
+                var email = $('#email').val();
+                $.ajax({
+                    url: '/send_otp',
+                    method: 'POST',
+                    data: { email: email },
+                    success: function(response) {
+                        $('#verifyOtpSection').removeClass('hidden');
+                        $('#error-message').text('');
+                    },
+                    error: function(response) {
+                        $('#error-message').text(response.responseJSON.message);
+                    }
+                });
+            });
+
+            $('#verifyOtpButton').click(function() {
+                var otpInput = $('#verification-code').val();
+                $.ajax({
+                    url: '/verify_otp',
+                    method: 'POST',
+                    data: { InputOtp: otpInput },
+                    success: function(response) {
+                        $('#verifyOtpSection').addClass('hidden');
+                        $('#completion-section').removeClass('hidden');
+                    },
+                    error: function(response) {
+                        $('#error-message').text(response.responseJSON.message);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

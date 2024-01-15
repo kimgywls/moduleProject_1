@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>계정 찾는 페이지</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='findID.css') }}">
+</head>
+<body>
+
+    <div class="total">
+        <div class="form">
+            <label id="findID-Label">아이디 찾기</label><br>
+            <form class="findID-form"  method="post" onsubmit="findID(event)">
+                <label>Name:</label>
+                <input type="text" id="username" name="username" required placeholder="본인 이름"><br>
+
+                <label>Email:</label>
+                <input type="text" id="email_id" name="email_id" required placeholder="가입시 입력한 이메일" > &nbsp<button type="submit">아이디 찾기</button>
+            </form>
+        </div>
+        <button id="homeBtn" onclick="window.location.href='{{ url_for('home') }}'">HOME</button>
+    </div>
+</body>
+</html>
+
+<script>
+    function findID(event) {
+        event.preventDefault();
+
+        var usernameInput = document.getElementById('username').value;
+        var emailInput = document.getElementById('email_id').value;
+
+        // AJAX를 사용하여 서버에 요청
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    // 응답을 받았을 때 동작
+                    var responseData = JSON.parse(xhr.responseText);
+
+                    if (responseData.id) {
+                        // ID를 찾았을 때
+                        alert('아이디를 찾았습니다: ' + responseData.id);
+                    } else {
+                        // 일치하는 계정이 없을 때
+                        alert('일치하는 계정이 없습니다.');
+                    }
+                } else {
+                    // 서버에서 4XX/5XX 응답을 받았을 때
+                    alert('ID 찾기에 실패했습니다.');
+                }
+            }
+        };
+
+        xhr.open('POST', '/find_ID', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send('username=' + encodeURIComponent(usernameInput) + '&email_id=' + encodeURIComponent(emailInput));
+    }
+</script>

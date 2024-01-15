@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='notices.css') }}">
+    <title>공지사항 목록</title>
+</head>
+<body>
+    <script>
+        window.onload = function() {
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    alert("{{ messages | join('\\\\n') }}");
+                {% endif %}
+            {% endwith %}
+        };
+    </script>
+
+    <h1>공지사항 목록</h1>
+    <ul>
+        {% for notice in notices %}
+            <li><a href="{{ url_for('notice', seq=notice.seq) }}">{{ notice.title }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
